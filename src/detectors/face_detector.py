@@ -4,12 +4,9 @@ from __future__ import annotations
 
 from typing import List, Tuple
 
-
-
-
 from config import settings
 from src.detectors.mp_compat import get_solutions_namespace
- 
+
 _solutions = get_solutions_namespace()
 _face_detection = _solutions.face_detection.FaceDetection(
     min_detection_confidence=settings.FACE_DETECTION_CONFIDENCE,

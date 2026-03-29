@@ -42,6 +42,5 @@ def get_solutions_namespace():
 
     raise MediaPipeSolutionsNotFound(
         "Could not locate MediaPipe Solutions APIs (face_detection/hands). "
-        "This usually means your installed mediapipe build does not include Solutions "
-        "for this Python/runtime combination."
+        "Use Python 3.9-3.12 with an official mediapipe wheel, then reinstall dependencies."
     )

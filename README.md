@@ -11,7 +11,8 @@ real_time_face_hand_detection/
 ├── src/
 │   ├── detectors/
 │   │   ├── face_detector.py
-│   │   └── hand_detector.py
+│   │   ├── hand_detector.py
+│   │   └── mp_compat.py
 │   ├── utils/
 │   │   ├── drawing.py
 │   │   └── fps.py
@@ -23,7 +24,7 @@ real_time_face_hand_detection/
 
 ## Requirements
 
-- Python 3.7+
+- **Python 3.9 - 3.12** (recommended: Python 3.11)
 - A working webcam
 
 ## Setup
@@ -48,7 +49,7 @@ real_time_face_hand_detection/
 python src/main.py
 ```
 
-`main.py` now performs preflight validation via `startup_checker.py` before detection starts. The app only enters the realtime loop if every startup check passes.
+`main.py` performs preflight validation via `startup_checker.py` before detection starts. The app only enters the realtime loop if every startup check passes.
 
 ## Controls
 
@@ -59,4 +60,4 @@ python src/main.py
 - If the camera does not open, try a different `CAMERA_ID` in `config/settings.py`.
 - If detection is slow, reduce `FRAME_WIDTH` / `FRAME_HEIGHT`.
 - You can disable one detector (`USE_FACE_DETECTION` or `USE_HAND_DETECTION`) to improve performance.
-- If startup says MediaPipe Solutions APIs are unavailable, install a compatible Python version (3.11 is recommended) and reinstall dependencies.
+- If startup reports missing MediaPipe Solutions APIs, you are likely using an unsupported Python runtime (for example Python 3.14). Create a new environment with Python 3.11, reinstall with `pip install -r requirements.txt`, and run again.

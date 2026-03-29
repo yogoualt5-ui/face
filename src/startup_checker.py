@@ -21,6 +21,20 @@ def _run_check(name: str, fn: Callable[[], Tuple[bool, str]]) -> bool:
     return ok
 
 
+def _check_python_runtime() -> Tuple[bool, str]:
+    major, minor = sys.version_info[:2]
+    if major != 3 or minor < 9 or minor > 12:
+        return (
+            False,
+            (
+                f"Detected Python {major}.{minor}. "
+                "This project requires Python 3.9-3.12 because MediaPipe Solutions "
+                "(face_detection/hands) are not available on unsupported Python builds."
+            ),
+        )
+    return True, f"Python {major}.{minor} is in supported range (3.9-3.12)"
+
+
 def _check_required_paths() -> Tuple[bool, str]:
     required = [
         PROJECT_ROOT / "config",
@@ -156,6 +170,7 @@ def _check_detector_imports() -> Tuple[bool, str]:
 def run_startup_checks() -> bool:
     """Run all startup checks and return True only if all pass."""
     checks: List[Tuple[str, Callable[[], Tuple[bool, str]]]] = [
+        ("Python runtime", _check_python_runtime),
         ("Required project paths", _check_required_paths),
         ("Dependency imports", _check_dependency_imports),
         ("MediaPipe discovery/import", _check_mediapipe_discovery),
