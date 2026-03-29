@@ -59,3 +59,4 @@ python src/main.py
 - If the camera does not open, try a different `CAMERA_ID` in `config/settings.py`.
 - If detection is slow, reduce `FRAME_WIDTH` / `FRAME_HEIGHT`.
 - You can disable one detector (`USE_FACE_DETECTION` or `USE_HAND_DETECTION`) to improve performance.
+- If startup says MediaPipe Solutions APIs are unavailable, install a compatible Python version (3.11 is recommended) and reinstall dependencies.

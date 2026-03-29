@@ -64,7 +64,14 @@ def _check_mediapipe_api_exposure() -> Tuple[bool, str]:
     except Exception as exc:  # noqa: BLE001
         return False, f"mediapipe import failed ({exc})"
 
-    has_solutions = hasattr(mp, "solutions")
+    has_attr_solutions = hasattr(mp, "solutions")
+
+    try:
+        solutions_module = importlib.import_module("mediapipe.solutions")
+        has_solutions_module = True
+    except Exception:
+        solutions_module = None
+        has_solutions_module = False
 
     try:
         importlib.import_module("mediapipe.python.solutions")
@@ -72,22 +79,28 @@ def _check_mediapipe_api_exposure() -> Tuple[bool, str]:
     except Exception:
         has_python_solutions = False
 
-    if not has_solutions and not has_python_solutions:
-        return False, "Neither mediapipe.solutions nor mediapipe.python.solutions is exposed"
+    if not has_attr_solutions and not has_solutions_module and not has_python_solutions:
+        return False, (
+            "Could not find MediaPipe Solutions API via mediapipe.solutions attribute, "
+            "mediapipe.solutions module, or mediapipe.python.solutions"
+        )
+
+    has_face = hasattr(solutions_module, "face_detection") if solutions_module else False
+    has_hands = hasattr(solutions_module, "hands") if solutions_module else False
 
     return True, (
-        f"mediapipe.solutions={'yes' if has_solutions else 'no'}, "
-        f"mediapipe.python.solutions={'yes' if has_python_solutions else 'no'}"
+        f"attr.solutions={'yes' if has_attr_solutions else 'no'}, "
+        f"module.mediapipe.solutions={'yes' if has_solutions_module else 'no'}, "
+        f"mediapipe.python.solutions={'yes' if has_python_solutions else 'no'}, "
+        f"module_face/hands={'yes' if (has_face and has_hands) else 'no'}"
     )
 
 
 def _check_face_and_hands_presence() -> Tuple[bool, str]:
     try:
-        mp = importlib.import_module("mediapipe")
-        solutions = getattr(mp, "solutions", None)
-        if solutions is None:
-            solutions = importlib.import_module("mediapipe.python.solutions")
+        from src.detectors.mp_compat import get_solutions_namespace
 
+        solutions = get_solutions_namespace()
         has_face = hasattr(solutions, "face_detection")
         has_hands = hasattr(solutions, "hands")
     except Exception as exc:  # noqa: BLE001

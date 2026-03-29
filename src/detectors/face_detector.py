@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from typing import List, Tuple
 
-import mediapipe as mp
+
+
 
 from config import settings
-
-_face_detection = mp.solutions.face_detection.FaceDetection(
+from src.detectors.mp_compat import get_solutions_namespace
+ 
+_solutions = get_solutions_namespace()
+_face_detection = _solutions.face_detection.FaceDetection(
     min_detection_confidence=settings.FACE_DETECTION_CONFIDENCE,
 )
 

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-import mediapipe as mp
-
 from config import settings
+from src.detectors.mp_compat import get_solutions_namespace
 
-_hands = mp.solutions.hands.Hands(
+_solutions = get_solutions_namespace()
+_hands = _solutions.hands.Hands(
     static_image_mode=False,
     max_num_hands=settings.MAX_HANDS,
     min_detection_confidence=settings.HAND_DETECTION_CONFIDENCE,
